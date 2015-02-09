@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-concat");
+  grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-shell");
   grunt.loadNpmTasks("grunt-contrib-jshint");
@@ -24,17 +25,24 @@ module.exports = function(grunt) {
         options: {
           separator: ";"
         },
-        dest: "<%= appbase %>/js/app-compiled.js",
+        dest: "<%= appbase %>/dist/jlScroll.js",
         src: [
-          "<%= appbase %>/js/dev/*.js",
-          "<%= appbase %>/js/dev/**/*.js",
+          "<%= appbase %>/src/*.js",
+          "<%= appbase %>/src/**/*.js",
         ],
+      }
+    },
+    uglify: {
+      target: {
+        files: {
+          "<%= appbase %>/dist/jlScroll.min.js": ["<%= appbase %>/dist/jlScroll.js"]
+        }
       }
     },
     jshint: {
       all: [
-        "<%= appbase %>/js/dev/*.js",
-        "<%= appbase %>/js/dev/**/*.js",
+        "<%= appbase %>/src/*.js",
+        "<%= appbase %>/src/**/*.js",
       ]
     },
     karma: {
@@ -56,7 +64,7 @@ module.exports = function(grunt) {
         version: "<%= pkg.version %>",
         url: "<%= pkg.homepage %>",
         options: {
-          paths: ["<%= appbase %>/js/dev"],
+          paths: ["<%= appbase %>/src"],
           outdir: "docs"
         }
       }
@@ -64,7 +72,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask("clean", ["shell:cleanDist"]);
-  grunt.registerTask("build", ["sass:dev", "concat"]);
+  grunt.registerTask("build", ["concat", "uglify:target"]);
   grunt.registerTask("docs", ["yuidoc"]);
   grunt.registerTask("test", ["karma:unit_auto"]);
 };

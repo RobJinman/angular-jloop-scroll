@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html data-ng-app="App">
+
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <link href='http://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'></link>
+
+    <script type="text/javascript" src="../../../vendor/angular/angular.js"></script>
+    <script type="text/javascript" src="../../../vendor/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../../../vendor/jlUtil/dist/jlUtil.js"></script>
+    <script type="text/javascript" src="../../../src/jlScroll.js"></script>
+    <script type="text/javascript">
+      angular.module("App", ["jlUtil", "jlScroll"])
+        .controller("MainCtrl", ["util", "$scope", "scroll", function(util, $scope, scroll) {
+          this.scrollY1 = 0;
+          this.scrollY2 = 0;
+          this.scrollY3 = 0;
+
+          this.click = util.debounce(function(str, num) {
+            console.log("str=" + str + ", num=" + num);
+          }, 1000);
+
+          this.onScroll2 = function(event) {
+            this.scrollY2 = event.target.scrollTop;
+          };
+
+          this.onScroll1 = function(event) {
+            this.scrollY1 = event.target.scrollTop;
+          };
+
+          this.onScroll3 = function(event) {
+            this.scrollY3 = event.target.scrollTop;
+    //        event.stopPropagation();
+          };
+
+          scroll.addCallback(util.element("#wrap1"), $scope, util.bind(this, this.onScroll2));
+        }]);
+    </script>
+  </head>
+
+  <body data-ng-controller="MainCtrl as ctrl">
+    <span id="counter1" data-ng-bind="ctrl.scrollY1"></span>
+    <span id="counter2" data-ng-bind="ctrl.scrollY2"></span>
+    <span id="counter3" data-ng-bind="ctrl.scrollY3"></span>
+    <div class="wrap" id="wrap1" jl-scroll="ctrl.onScroll1(event)">
+      <div id="content">
+        <button data-ng-click="ctrl.click('hi', 123)">Click me</button>
+
+        <div class="wrap" jl-scroll="ctrl.onScroll3(event)">
+          <div class="content">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+

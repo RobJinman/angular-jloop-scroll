@@ -1,0 +1,26 @@
+{
+  "name": "jlScroll",
+  "version": "0.0.0",
+  "authors": [
+    "Rob Jinman <admin@robjinman.com>"
+  ],
+  "description": "AngularJS module containing browser scrolling utilities. Originally part of the JLoop project.",
+  "main": [
+    "dist/jlScroll.min.js"
+  ],
+  "license": "MIT License",
+  "private": true,
+  "ignore": [
+    "node_modules",
+    "src",
+    "test",
+    "vendor",
+    ".gitignore"
+  ],
+  "dependencies": {
+    "angular": "~1.3.x",
+    "angular-mocks": "~1.3.x",
+    "jquery": "~2.1.1",
+    "jlUtil": "robjinman/angular-jloop-util"
+  }
+}
