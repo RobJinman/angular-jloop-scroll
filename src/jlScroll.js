@@ -9,10 +9,11 @@ var jl = jl || {};
 * @class scroll
 * @static
 * @param {Angular service} jlWindow
+* @param {Angular service} jlDocument
 * @param {Angular service} util
 * @param {Number} maxScrollsPerSecond
 */
-jl.Scroll = function(jlWindow, $rootScope, util, maxScrollsPerSecond) {
+jl.Scroll = function(jlWindow, jlDocument, $rootScope, util, maxScrollsPerSecond) {
   var _handlers = {};
   var _nextId = 0;
 
@@ -69,20 +70,35 @@ jl.Scroll = function(jlWindow, $rootScope, util, maxScrollsPerSecond) {
   * @param {DOM Element} element
   * @param {Integer} destY
   * @param {Integer} pps Pixels per second
+  * @param {String} easing Defaults to "swing"
   */
-  this.scrollTo = function(element, destY, pps) {
+  this.scrollTo = function(element, destY, pps, easing) {
+    easing = easing || "swing";
+
+    var maxY = 0;
+    if (util.isWindow(element)) {
+      maxY = rlDocument.height() - element.height();
+    }
+    else {
+      maxY = element.get(0).scrollHeight - element.innerHeight();
+    }
+
+    if (destY > maxY) {
+      destY = maxY;
+    }
+
     var h = Math.abs(destY - element.scrollTop());
     var t = h / pps;
 
     if (util.isWindow(element)) {
       util.element("html, body").animate({
         scrollTop: destY
-      }, t * 1000);
+      }, t * 1000, easing);
     }
     else {
       element.animate({
         scrollTop: destY
-      }, t * 1000);
+      }, t * 1000, easing);
     }
   };
 };
@@ -107,8 +123,8 @@ angular.module("jlScroll", ["jlUtil"])
     var self = this;
     self.maxScrollEventsPerSecond = 30;
 
-    self.$get = ["jlWindow", "$rootScope", "util", function(jlWindow, $rootScope, util) {
-      return new jl.Scroll(jlWindow, $rootScope, util, self.maxScrollEventsPerSecond);
+    self.$get = ["jlWindow", "jlDocument", "$rootScope", "util", function(jlWindow, jlDocument, $rootScope, util) {
+      return new jl.Scroll(jlWindow, jlDocument, $rootScope, util, self.maxScrollEventsPerSecond);
     }];
   }])
 

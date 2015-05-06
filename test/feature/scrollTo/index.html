@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html data-ng-app="App">
+
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <link href='http://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'></link>
+
+    <script type="text/javascript" src="../../../vendor/angular/angular.js"></script>
+    <script type="text/javascript" src="../../../vendor/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../../../vendor/jlUtil/dist/jlUtil.js"></script>
+    <script type="text/javascript" src="../../../src/jlScroll.js"></script>
+    <script type="text/javascript">
+      angular.module("App", ["jlUtil", "jlScroll"])
+        .controller("MainCtrl", ["util", "scroll", function(util, scroll) {
+          this.element = "";
+          this.pps = 1000;
+
+          this.scroll = function() {
+            var elem = $("#" + this.element);
+            var y = util.posWithinParent(elem, $("#wrap")).y;
+
+            scroll.scrollTo($("#wrap"), y, this.pps);
+          };
+        }]);
+    </script>
+  </head>
+
+  <body data-ng-controller="MainCtrl as ctrl">
+    <button data-ng-click="ctrl.scroll()">Scroll</button>
+    <form>
+      <input type="text" data-ng-model="ctrl.pps">
+      <select data-ng-model="ctrl.element">
+        <option value="para1">para1</option>
+        <option value="para2">para2</option>
+        <option value="para3">para3</option>
+        <option value="para4">para4</option>
+      </select>
+    </form>
+    <div class="wrap" id="wrap" jl-scroll="ctrl.onScroll1(event)">
+      <p id="para1">This is para1.</p>
+      <p id="para2">This is para2.</p>
+      <p id="para3">This is para3.</p>
+      <p id="para4">This is para4.</p>
+    </div>
+  </body>
+</html>
+
