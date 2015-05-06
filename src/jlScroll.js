@@ -77,7 +77,7 @@ jl.Scroll = function(jlWindow, jlDocument, $rootScope, util, maxScrollsPerSecond
 
     var maxY = 0;
     if (util.isWindow(element)) {
-      maxY = rlDocument.height() - element.height();
+      maxY = jlDocument.height() - element.height();
     }
     else {
       maxY = element.get(0).scrollHeight - element.innerHeight();
